@@ -1,0 +1,51 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  remote_user: davidhun
+  vars:
+
+  tasks:
+  - name: Installation prerequisites (EPEL)
+    yum:
+      name: epel-release
+      state: latest
+      update_cache: yes
+
+  - name: Install required packages
+    yum:
+      name: "{{ item }}"
+      state: latest
+      update_cache: yes
+    with_items:
+    - realmd
+    - sssd
+    - ntp
+    - krb5-workstation
+    - samba-common
+    - adcli
+    - python-pip
+
+# pip is required
+
+  - name: Upgrade pip to latest version
+    command: /bin/pip install --upgrade pip
+
+  - name: Install pip setuptools
+    command: /bin/pip install setuptools
+
+  - name: Install python pexpect package via pip
+    command: /bin/pip install pexpect
+
+# Join the domain
+#  - name: Get local username running playbook
+#    local_action: command whoami
+#    register: adm_user
+
+  - name: Join the domain
+    expect:
+      command: /sbin/realm join -U {{ adm_user }}@corp.tanium.com corp.tanium.com
+      responses:
+        '^Password.*:': "{{ adm_password }}"
+#    no_log: true
+
