@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  vars:
+  tasks:
+  - name: Copy sshd banner to /etc/ssh/sshd_banner
+    template:
+      src: ~/AnsiblePlaybooks/Banners/sshd_banner
+      dest: /etc/ssh/sshd_banner
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Configure /etc/ssh/sshd_config
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: .*Banner.*
+      line: 'Banner /etc/ssh/sshd_banner'
+    notify:
+      - reload sshd
+      - reload ssh
+
+# This section is the handler for the ssh or sshd service restart
+  handlers:
+    - name: reload sshd 
+      service:
+        name: sshd
+        state: reloaded
+      when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") or
+            (ansible_distribution == "CentOS" and ansible_distribution_major_version == "6") or
+            (ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "16")
+
+    - name: reload ssh
+      service:
+        name: ssh
+        state: reloaded
+      when: (ansible_distribution == "Ubuntu" and ansible_distriution_major_version == "14") 
