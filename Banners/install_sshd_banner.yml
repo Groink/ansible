@@ -6,7 +6,7 @@
   tasks:
   - name: Copy sshd banner to /etc/ssh/sshd_banner
     template:
-      src: /home/corp.tanium.com/david.hunter/AnsiblePlaybooks/Banners/sshd_banner
+      src: sshd_banner
       dest: /etc/ssh/sshd_banner
       owner: root
       group: root
