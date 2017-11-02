@@ -6,7 +6,7 @@
   tasks:
   - name: Copy MOTD to destination system(s)
     copy:
-      src: Banners/motd
+      src: motd
       dest: /etc/motd
       owner: root
       group: root
