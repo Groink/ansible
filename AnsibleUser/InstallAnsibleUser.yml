@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  vars:
+  tasks:
+  - name: Create local user ansible
+    user:
+      name: ansible
+      comment: "Ansible User"
+      uid: 1966
+      group: adm,wheel
+      append: yes
+      shell: /bin/bash
+
+  - name: Add public key to authorized_keys file
+    authorized_key:
+      user: ansible
+      state: present
+      key: ansible.pub
+
+  - name: Add Ansible user to sudoers
+    template:
+      src: ansible
+      dest: /etc/sudoers.d/ansible
+      owner: root
+      group: root
+      mode: 0400
+      validate: '/sbin/visudo -cf %s'
