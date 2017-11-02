@@ -35,4 +35,4 @@
       service:
         name: ssh
         state: reloaded
-      when: (ansible_distribution == "Ubuntu" and ansible_distriution_major_version == "14") 
+      when: (ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "14")

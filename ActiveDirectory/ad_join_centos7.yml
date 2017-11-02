@@ -2,7 +2,6 @@
 - hosts: all
   become: yes
   become_method: sudo
-  remote_user: davidhun
   vars:
 
   tasks:
