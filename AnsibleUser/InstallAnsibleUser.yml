@@ -9,7 +9,8 @@
       name: ansible
       comment: "Ansible User"
       uid: 1966
-      group: adm,wheel
+      group: ansible
+      groups: adm,wheel
       append: yes
       shell: /bin/bash
 
