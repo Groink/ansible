@@ -1,3 +1,5 @@
+# CentOS 7 Active Directory join using realmd
+
 ---
 - hosts: all
   become: yes
@@ -19,10 +21,11 @@
     with_items:
     - realmd
     - sssd
-    - ntp
+#   - ntp                 # not needed if chronyd is installed -- just to keep time sync with domain controller
     - krb5-workstation
     - samba-common
-    - adcli
+    - samba-common-tools
+#   - adcli               # needed with Ubuntu, not with CentOS
     - python-pip
 
 # pip is required
@@ -48,3 +51,25 @@
         '^Password.*:': "{{ adm_password }}"
 #    no_log: true
 
+  - name: Install sane krb5.conf file
+    template:
+      src: krb5.conf
+      dest: /etc/krb5.conf
+      owner: root
+      group: root
+      mode: 0600
+
+  - name: Install sane sssd.conf file
+    template:
+      src: sssd.conf
+      dest: /etc/sssd/sssd.conf
+      owner: root
+      group: root
+      mode: 0600
+    notify: Restart SSSD
+
+  handlers:
+    - name: Restart SSSD
+      service:
+        name: sssd
+        state: restarted
