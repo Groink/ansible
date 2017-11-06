@@ -72,8 +72,6 @@
         name: chrony
         state: reloaded
 
-# Joining the domain
-
   - name: Join the domain
     expect:
       command: /sbin/realm join -U {{ adm_user }}@corp.tanium.com corp.tanium.com
