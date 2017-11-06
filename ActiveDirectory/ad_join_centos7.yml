@@ -21,14 +21,15 @@
     with_items:
     - realmd
     - sssd
-#   - ntp                 # not needed if chronyd is installed -- just to keep time sync with domain controller
+    - chrony
     - krb5-workstation
     - samba-common
     - samba-common-tools
-#   - adcli               # needed with Ubuntu, not with CentOS
+    - oddjob
+    - oddjob-mkhomedir
     - python-pip
 
-# pip is required
+# Install pip and related required packages
 
   - name: Upgrade pip to latest version
     command: /bin/pip install --upgrade pip
@@ -39,17 +40,49 @@
   - name: Install python pexpect package via pip
     command: /bin/pip install pexpect
 
-# Join the domain
-#  - name: Get local username running playbook
-#    local_action: command whoami
-#    register: adm_user
+# Configuring chrony to use domain controllers at time servers
+
+  - name: Ensure that chronyd is installed
+    yum:
+      name: chrony
+      state: present
+
+# Comments out any lines starting with "server" and containing "centos", ending with "iburst".
+# Why sed? Using sed was easier for me than trying to figure out how to get the backrefs to work in the
+# replace module.
+
+  - name: Comment out default CentOS pool
+    command: sed -i '/^server.*centos.*iburst$/s/^/#\ /g' /etc/chrony.conf
+
+  - name: Add dc02.corp.tanium.com to chrony.conf
+    lineinfile:
+      path: /etc/chrony.conf
+      line: 'server dc02.corp.tanium.com iburst'
+    notify: Reload chrony
+
+  - name: Add dc01.corp.taniun.com to chrony.conf
+    lineinfile:
+      path: /etc/chrony.conf
+      line: 'server dc01.corp.tanium.com iburst'
+    notify: Reload chrony
+
+  handlers:
+    - name: Reload chrony
+      systemd:
+        name: chrony
+        state: reloaded
+
+# Joining the domain
 
   - name: Join the domain
     expect:
       command: /sbin/realm join -U {{ adm_user }}@corp.tanium.com corp.tanium.com
       responses:
         '^Password.*:': "{{ adm_password }}"
-#    no_log: true
+#    no_log: true         # uncomment this when in production -- obfuscates the password in logs
+
+
+# Configuration file copy for Kerberos and SSSD
 
   - name: Install sane krb5.conf file
     template:

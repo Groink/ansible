@@ -3,5 +3,8 @@
   become: yes
   become_method: sudo
   vars:
+- import_playbook: ad_join_centos7.yml
+
+
   tasks:
   - name: 
