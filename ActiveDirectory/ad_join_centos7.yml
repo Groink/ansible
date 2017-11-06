@@ -66,12 +66,6 @@
       line: 'server dc01.corp.tanium.com iburst'
     notify: Reload chrony
 
-  handlers:
-    - name: Reload chrony
-      systemd:
-        name: chrony
-        state: reloaded
-
   - name: Join the domain
     expect:
       command: /sbin/realm join -U {{ adm_user }}@corp.tanium.com corp.tanium.com
@@ -104,3 +98,8 @@
       service:
         name: sssd
         state: restarted
+
+    - name: Reload chrony
+      systemd:
+        name: chrony
+        state: reloaded
