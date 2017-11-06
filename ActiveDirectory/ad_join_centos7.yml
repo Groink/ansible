@@ -71,7 +71,7 @@
       command: /sbin/realm join -U {{ adm_user }}@corp.tanium.com corp.tanium.com
       responses:
         '^Password for "{{ adm_user }}":': "{{ adm_password }}"
-      timeout: 300
+      timeout: 15
 
 #    no_log: true         # uncomment this when in production -- obfuscates the password in logs
 
