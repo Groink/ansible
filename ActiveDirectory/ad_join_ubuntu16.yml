@@ -1,7 +1,7 @@
 # Ubuntu 16 Active Directory join using realmd
 
 ---
-- hosts: all
+# - hosts: all
   become: yes
   become_method: sudo
   vars:
