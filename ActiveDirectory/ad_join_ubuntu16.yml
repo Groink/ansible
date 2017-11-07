@@ -45,17 +45,17 @@
 # replace module.
 
   - name: Comment out default Ubuntu pool
-    command: /bin/sed -i '/^server.*ubuntu.*iburst$/s/^/#\ /g' /etc/chrony.conf
+    command: /bin/sed -i '/^server.*ubuntu.*iburst$/s/^/#\ /g' /etc/chrony/chrony.conf
 
   - name: Add dc02.corp.tanium.com to chrony.conf
     lineinfile:
-      path: /etc/chrony.conf
+      path: /etc/chrony/chrony.conf
       line: 'server dc02.corp.tanium.com iburst'
     notify: Reload chrony
 
   - name: Add dc01.corp.taniun.com to chrony.conf
     lineinfile:
-      path: /etc/chrony.conf
+      path: /etc/chrony/chrony.conf
       line: 'server dc01.corp.tanium.com iburst'
     notify: Reload chrony
 
