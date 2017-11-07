@@ -1,12 +1,12 @@
 # CentOS 7 Active Directory join using realmd
 
 ---
-- hosts: all
-  become: yes
-  become_method: sudo
-  vars:
+#- hosts: all
+#  become: yes
+#  become_method: sudo
+#  vars:
 
-  tasks:
+- tasks:
   - name: Installation prerequisites (EPEL)
     yum:
       name: epel-release
