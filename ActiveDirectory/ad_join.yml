@@ -1,8 +1,5 @@
 ---
-- hosts: all
-  become: yes
-  become_method: sudo
-  vars:
+- vars:
 
   tasks:
   - name: Join as CentOS 7
