@@ -25,13 +25,13 @@
 # Install pip and related required packages
 
   - name: Upgrade pip to latest version
-    command: /bin/pip install --upgrade pip
+    command: /usr/bin/pip install --upgrade pip
 
   - name: Install pip setuptools
-    command: /bin/pip install setuptools
+    command: /usr/bin/pip install setuptools
 
   - name: Install python pexpect package via pip
-    command: /bin/pip install pexpect
+    command: /usr/bin/pip install pexpect
 
 # Configuring chrony to use domain controllers at time servers
 
