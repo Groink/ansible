@@ -61,7 +61,7 @@
 
   - name: Join the domain
     expect:
-      command: /sbin/realm join -U {{ adm_user }}@corp.tanium.com corp.tanium.com --install=/
+      command: /usr/sbin/realm join -U {{ adm_user }}@corp.tanium.com corp.tanium.com --install=/
       responses:
         '^Password for.*:': "{{ adm_password }}"
       timeout: 15
