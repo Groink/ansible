@@ -1,4 +1,4 @@
-# CentOS 7 Active Directory join using realmd
+# Ubuntu 16 Active Directory join using realmd
 
 ---
 - hosts: all
@@ -7,26 +7,19 @@
   vars:
 
   tasks:
-  - name: Installation prerequisites (EPEL)
-    yum:
-      name: epel-release
-      state: latest
-      update_cache: yes
 
   - name: Install required packages
-    yum:
+    apt:
       name: "{{ item }}"
       state: latest
       update_cache: yes
     with_items:
     - realmd
     - sssd
+    - adcli
     - chrony
-    - krb5-workstation
+    - krb5-user
     - samba-common
-    - samba-common-tools
-    - oddjob
-    - oddjob-mkhomedir
     - python-pip
 
 # Install pip and related required packages
@@ -43,7 +36,7 @@
 # Configuring chrony to use domain controllers at time servers
 
   - name: Ensure that chronyd is installed
-    yum:
+    apt:
       name: chrony
       state: present
 
@@ -51,8 +44,8 @@
 # Why sed? Using sed was easier for me than trying to figure out how to get the backrefs to work in the
 # replace module.
 
-  - name: Comment out default CentOS pool
-    command: /bin/sed -i '/^server.*centos.*iburst$/s/^/#\ /g' /etc/chrony.conf
+  - name: Comment out default Ubuntu pool
+    command: /bin/sed -i '/^server.*ubuntu.*iburst$/s/^/#\ /g' /etc/chrony.conf
 
   - name: Add dc02.corp.tanium.com to chrony.conf
     lineinfile:
@@ -68,7 +61,7 @@
 
   - name: Join the domain
     expect:
-      command: /sbin/realm join -U {{ adm_user }}@corp.tanium.com corp.tanium.com
+      command: /sbin/realm join -U {{ adm_user }}@corp.tanium.com corp.tanium.com --install=/
       responses:
         '^Password for.*:': "{{ adm_password }}"
       timeout: 15
