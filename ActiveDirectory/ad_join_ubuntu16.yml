@@ -1,12 +1,7 @@
 # Ubuntu 16 Active Directory join using realmd
 
 ---
-- hosts: all
-  become: yes
-  become_method: sudo
-  vars:
-
-  tasks:
+- tasks:
 
   - name: Install required packages
     apt:

@@ -1,5 +1,9 @@
 ---
-- tasks:
+- hosts: all
+  become: yes
+  become_method: sudo
+  vars:
+  tasks:
   - name: Join as CentOS 7
     include: ad_join_centos7.yml
     when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
