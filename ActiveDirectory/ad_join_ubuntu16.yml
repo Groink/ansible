@@ -65,7 +65,7 @@
       responses:
         '^Password for.*:': "{{ adm_password }}"
       timeout: 15
-      no_log: true         # uncomment this when in production -- obfuscates the password in logs
+    no_log: true         # uncomment this when in production -- obfuscates the password in logs
 
 
 # Configuration file copy for Kerberos and SSSD
