@@ -1,7 +1,6 @@
 # CentOS 7 Active Directory join using realmd
 
----
-- tasks:
+  tasks:
   - name: Installation prerequisites (EPEL)
     yum:
       name: epel-release
