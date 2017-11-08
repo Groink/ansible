@@ -6,12 +6,12 @@
   vars:
   tasks:
   - name: Validate user
-    command: id {{ user_name }}
+    command: id "{{ user_name }}"
     register: command_result
     failed_when: command_result.rc != 0
 
   - name: Add user's public key to authorized_keys files
     authorized_key:
-      user: {{ user_name }}
+      user: "{{ user_name }}"
       state: present
-      key: {{ public_key_url }}
+      key: "{{ public_key_url }}"
