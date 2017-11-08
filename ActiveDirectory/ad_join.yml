@@ -2,6 +2,7 @@
 - hosts: all
   become: yes
   become_method: sudo
+  remote_user: ansible
   vars:
   tasks:
   - name: Join as CentOS 7
