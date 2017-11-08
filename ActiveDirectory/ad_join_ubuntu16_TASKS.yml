@@ -61,7 +61,7 @@
     responses:
       '^Password for.*:': "{{ adm_password }}"
     timeout: 15
-  no_log: true         # uncomment this when in production -- obfuscates the password in logs
+#  no_log: true         # uncomment this when in production -- obfuscates the password in logs
 
 - name: Enable creation of home directory on login
   lineinfile:
