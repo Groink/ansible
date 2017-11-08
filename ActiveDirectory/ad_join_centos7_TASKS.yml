@@ -27,10 +27,8 @@
 
 - name: Upgrade pip to latest version
   command: /bin/pip install --upgrade pip
-
 - name: Install pip setuptools
   command: /bin/pip install setuptools
-
 - name: Install python pexpect package via pip
   command: /bin/pip install pexpect
 
@@ -54,11 +52,16 @@
     line: 'server dc02.corp.tanium.com iburst'
   notify: Reload chrony
 
-- name: Add dc01.corp.taniun.com to chrony.conf
+- name: Add dc01.corp.tanium.com to chrony.conf
   lineinfile:
     path: /etc/chrony.conf
     line: 'server dc01.corp.tanium.com iburst'
   notify: Reload chrony
+
+- name: Configure realmd
+  template:
+    src: realmd.conf.j2
+    dest: /etc/realmd.conf
 
 - name: Join the domain
   expect:
@@ -87,14 +90,3 @@
     group: root
     mode: 0600
   notify: Restart SSSD
-
-  handlers:
-    - name: Restart SSSD
-      service:
-        name: sssd
-        state: restarted
-
-    - name: Reload chrony
-      systemd:
-        name: chrony
-        state: reloaded

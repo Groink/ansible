@@ -50,6 +50,11 @@
     line: 'server dc01.corp.tanium.com iburst'
   notify: Reload chrony
 
+- name: Configure realmd
+  template:
+    src: realmd.conf.j2
+    dest: /etc/realmd.conf
+
 - name: Join the domain
   expect:
     command: /usr/sbin/realm join -U {{ adm_user }} corp.tanium.com --install=/
