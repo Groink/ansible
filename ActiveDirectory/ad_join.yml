@@ -1,5 +1,6 @@
 ---
 <<<<<<< HEAD
+<<<<<<< HEAD
 - hosts: all
   become: yes
   become_method: sudo
@@ -10,6 +11,8 @@
 #    import_tasks: ad_join_centos7.yml
 #    when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
 =======
+=======
+>>>>>>> parent of 90d556f... Finishing main AD join playbook
 - tasks:
   - name: Join as CentOS 7
     include: ad_join_centos7.yml

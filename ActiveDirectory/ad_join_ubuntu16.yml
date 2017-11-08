@@ -1,27 +1,11 @@
 # Ubuntu 16 Active Directory join using realmd
----
-<<<<<<< HEAD
-tasks:
 
-- name: Install required packages
-  apt:
-    name: "{{ item }}"
-    state: latest
-    update_cache: yes
-  with_items:
-  - realmd
-  - sssd
-  - adcli
-  - chrony
-  - krb5-user
-  - samba-common
-  - python-pip
-=======
+---
 - hosts: all
   become: yes
   become_method: sudo
+  remote_user: ansible
   vars:
-
   tasks:
 
   - name: Install required packages
@@ -37,82 +21,83 @@ tasks:
     - krb5-user
     - samba-common
     - python-pip
->>>>>>> parent of 90d556f... Finishing main AD join playbook
 
 # Install pip and related required packages
 
-- name: Upgrade pip to latest version
-  command: /usr/bin/pip install --upgrade pip
-- name: Install pip setuptools
-  command: /usr/bin/pip install setuptools
-- name: Install python pexpect package via pip
-  command: /usr/bin/pip install pexpect
+  - name: Upgrade pip to latest version
+    command: /usr/bin/pip install --upgrade pip
+  - name: Install pip setuptools
+    command: /usr/bin/pip install setuptools
+  - name: Install python pexpect package via pip
+    command: /usr/bin/pip install pexpect
 
 # Configuring chrony to use domain controllers at time servers
 
-- name: Ensure that chronyd is installed
-  apt:
-    name: chrony
-    state: present
+  - name: Ensure that chronyd is installed
+    apt:
+      name: chrony
+      state: present
 
 # Comments out any lines starting with "server" and containing "centos", ending with "iburst".
 # Why sed? Using sed was easier for me than trying to figure out how to get the backrefs to work in the
 # replace module.
 
-- name: Comment out default Ubuntu pool
-  command: /bin/sed -i '/^server.*ubuntu.*iburst$/s/^/#\ /g' /etc/chrony/chrony.conf
+  - name: Comment out default Ubuntu pool
+    command: /bin/sed -i '/^server.*ubuntu.*iburst$/s/^/#\ /g' /etc/chrony/chrony.conf
 
-- name: Add dc02.corp.tanium.com to chrony.conf
-  lineinfile:
-    path: /etc/chrony/chrony.conf
-    line: 'server dc02.corp.tanium.com iburst'
-  notify: Reload chrony
+  - name: Add dc02.corp.tanium.com to chrony.conf
+    lineinfile:
+      path: /etc/chrony/chrony.conf
+      line: 'server dc02.corp.tanium.com iburst'
+    notify: Reload chrony
 
-- name: Add dc01.corp.taniun.com to chrony.conf
-  lineinfile:
-    path: /etc/chrony/chrony.conf
-    line: 'server dc01.corp.tanium.com iburst'
-  notify: Reload chrony
+  - name: Add dc01.corp.tanium.com to chrony.conf
+    lineinfile:
+      path: /etc/chrony/chrony.conf
+      line: 'server dc01.corp.tanium.com iburst'
+    notify: Reload chrony
 
-- name: Join the domain
-  expect:
-    command: /usr/sbin/realm join -U {{ adm_user }} corp.tanium.com --install=/
-    responses:
-      '^Password for.*:': "{{ adm_password }}"
-    timeout: 15
-  no_log: true         # uncomment this when in production -- obfuscates the password in logs
+  - name: Join the domain
+    expect:
+      command: /usr/sbin/realm join -U {{ adm_user }} corp.tanium.com --install=/
+      responses:
+        '^Password for.*:': "{{ adm_password }}"
+      timeout: 15
+    no_log: true         # uncomment this when in production -- obfuscates the password in logs
 
-- name: Enable creation of home directory on login
-  lineinfile:
-    path: /etc/pam.d/common-session
-    line: 'session optional pam_mkhomedir.so'
+  - name: Enable creation of home directory on login
+    lineinfile:
+      path: /etc/pam.d/common-session
+      line: 'session optional pam_mkhomedir.so'
 
 # Configuration file copy for Kerberos and SSSD
 
-- name: Install sane krb5.conf file
-  template:
-    src: krb5.conf
-    dest: /etc/krb5.conf
-    owner: root
-    group: root
-    mode: 0600
+  - name: Install sane krb5.conf file
+    template:
+      src: krb5.conf
+      dest: /etc/krb5.conf
+      owner: root
+      group: root
+      mode: 0600
 
-- name: Install sane sssd.conf file
-  template:
-    src: sssd.conf
-    dest: /etc/sssd/sssd.conf
-    owner: root
-    group: root
-    mode: 0600
-  notify: Restart SSSD
+  - name: Install sane sssd.conf file
+    template:
+      src: sssd.conf
+      dest: /etc/sssd/sssd.conf
+      owner: root
+      group: root
+      mode: 0600
+    notify: Restart SSSD
 
-handlers:
-  - name: Restart SSSD
-    service:
-      name: sssd
-      state: restarted
+# Handlers
 
-  - name: Reload chrony
-    systemd:
-      name: chrony
-      state: reloaded
+  handlers:
+    - name: Restart SSSD
+      service:
+        name: sssd
+        state: restarted
+
+    - name: Reload chrony
+      systemd:
+        name: chrony
+        state: reloaded
