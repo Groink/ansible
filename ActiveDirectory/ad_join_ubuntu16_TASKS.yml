@@ -84,13 +84,13 @@
 
 # Handlers
 
-handlers:
-  - name: Restart SSSD
-    service:
-      name: sssd
-      state: restarted
+  handlers:
+    - name: Restart SSSD
+      service:
+        name: sssd
+        state: restarted
 
-  - name: Reload chrony
-    systemd:
-      name: chrony
-      state: reloaded
+    - name: Reload chrony
+      systemd:
+        name: chrony
+        state: reloaded
