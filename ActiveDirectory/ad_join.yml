@@ -6,9 +6,9 @@
   vars:
   tasks:
   - name: Join as CentOS 7
-    import_playbook: ad_join_centos7_TASKS.yml
+    include_tasks: ad_join_centos7_TASKS.yml
     when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
 
   - name: Join as Ubuntu 16
-    import_playbook: ad_join_ubuntu16_TASKS.yml
+    include_tasks: ad_join_ubuntu16_TASKS.yml
     when: (ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "16")
