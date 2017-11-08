@@ -5,9 +5,9 @@
   remote_user: ansible
   vars:
   tasks:
-  - name: Join as CentOS 7
-    import_tasks: ad_join_centos7.yml
-    when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
+#  - name: Join as CentOS 7
+#    import_tasks: ad_join_centos7.yml
+#    when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
 
   - name: Join as Ubuntu 16
     import_tasks: ad_join_ubuntu16.yml
