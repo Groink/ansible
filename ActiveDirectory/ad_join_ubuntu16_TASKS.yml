@@ -82,15 +82,3 @@
     mode: 0600
   notify: Restart SSSD
 
-# Handlers
-
-  handlers:
-    - name: Restart SSSD
-      service:
-        name: sssd
-        state: restarted
-
-    - name: Reload chrony
-      systemd:
-        name: chrony
-        state: reloaded
