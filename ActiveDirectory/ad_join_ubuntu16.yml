@@ -1,5 +1,6 @@
 # Ubuntu 16 Active Directory join using realmd
 ---
+<<<<<<< HEAD
 tasks:
 
 - name: Install required packages
@@ -15,6 +16,28 @@ tasks:
   - krb5-user
   - samba-common
   - python-pip
+=======
+- hosts: all
+  become: yes
+  become_method: sudo
+  vars:
+
+  tasks:
+
+  - name: Install required packages
+    apt:
+      name: "{{ item }}"
+      state: latest
+      update_cache: yes
+    with_items:
+    - realmd
+    - sssd
+    - adcli
+    - chrony
+    - krb5-user
+    - samba-common
+    - python-pip
+>>>>>>> parent of 90d556f... Finishing main AD join playbook
 
 # Install pip and related required packages
 
