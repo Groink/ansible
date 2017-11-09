@@ -18,7 +18,7 @@
       line: 'AuthorizedKeysCommandUser nobody'
       validate: 'sshd -tf %s'
 
-  - name: Enabled public key authentication
+  - name: Enable public key authentication
     lineinfile:
       path: /etc/ssh/sshd_config
       regexp: '.*PubkeyAuthentication.*'
