@@ -19,7 +19,7 @@
     notify: Reload sshd config
 
   - name: Enable public key authentication
-    line:
+    lineinfile:
       path: /etc/ssh/sshd_config
       regexp: '.*PubkeyAuthentication.*'
       line: 'PubkeyAuthentication yes'
