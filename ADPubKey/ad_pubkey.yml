@@ -10,7 +10,6 @@
       path: /etc/ssh/sshd_config
       regexp: '.*AuthorizedKeysCommand.*'
       line: 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys'
-      validate: 'sshd -tf %s'
 
   - name: Add AuthorizedKeysCommandUser directive to /etc/ssh/sshd_config
     lineinfile:
