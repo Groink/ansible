@@ -9,20 +9,20 @@
     replace:
       path: /etc/ssh/sshd_config
       regexp: '.*AuthorizedKeysCommand.*'
-      line: 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys'
+      replace: 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys'
 
   - name: Add AuthorizedKeysCommandUser directive to /etc/ssh/sshd_config
     replace:
       path: /etc/ssh/sshd_config
       regexp: '.*AuthorizedKeysCommandUser.*'
-      line: 'AuthorizedKeysCommandUser nobody'
+      replace: 'AuthorizedKeysCommandUser nobody'
     notify: Reload sshd config
 
   - name: Enable public key authentication
     replace:
       path: /etc/ssh/sshd_config
       regexp: '.*PubkeyAuthentication.*'
-      line: 'PubkeyAuthentication yes'
+      replace: 'PubkeyAuthentication yes'
       validate: 'sshd -tf %s'
     notify: Reload sshd config
 
