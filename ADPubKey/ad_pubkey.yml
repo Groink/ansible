@@ -6,23 +6,23 @@
   vars:
   tasks:
   - name: Add AuthorizedKeysCommand directive to /etc/ssh/sshd_config
-    replace:
+    lineinfile:
       path: /etc/ssh/sshd_config
       regexp: '.*AuthorizedKeysCommand.*'
-      replace: 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys'
+      line: 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys'
 
   - name: Add AuthorizedKeysCommandUser directive to /etc/ssh/sshd_config
-    replace:
+    lineinfile:
       path: /etc/ssh/sshd_config
       regexp: '.*AuthorizedKeysCommandUser.*'
-      replace: 'AuthorizedKeysCommandUser nobody'
+      line: 'AuthorizedKeysCommandUser nobody'
     notify: Reload sshd config
 
   - name: Enable public key authentication
-    replace:
+    line:
       path: /etc/ssh/sshd_config
       regexp: '.*PubkeyAuthentication.*'
-      replace: 'PubkeyAuthentication yes'
+      line: 'PubkeyAuthentication yes'
       validate: 'sshd -tf %s'
     notify: Reload sshd config
 
