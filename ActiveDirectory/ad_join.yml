@@ -25,3 +25,10 @@
       systemd:
         name: chrony
         state: reloaded
+        daemon_reload: yes
+
+    - name: Reload chronyd
+      systemd:
+        name: chronyd
+        state: reloaded
+        daemon_reload: yes

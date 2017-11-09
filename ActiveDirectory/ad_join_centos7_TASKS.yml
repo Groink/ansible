@@ -1,7 +1,7 @@
 # CentOS 7 Active Directory join using realmd
 
 ---
-- name: Installation prerequisites (EPEL)
+- name: Installat prerequisites (EPEL)
   yum:
     name: epel-release
     state: latest
@@ -56,7 +56,7 @@
   lineinfile:
     path: /etc/chrony.conf
     line: 'server dc01.corp.tanium.com iburst'
-  notify: Reload chrony
+  notify: Reload chronyd
 
 - name: Configure realmd
   template:
