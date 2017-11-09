@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  remote_user: ansible
+  vars:
+  tasks:
+  - name: Update sssd.conf file
+    template:
+      src: sssd.conf
+      path: /etc/sssd/sssd.conf
+      owner: root
+      group: root
+      mode: 0600
+    notify: Restart SSSD
+
+  handlers:
+    - name: Restart SSSD
+      service:
+        name: sssd
+        state: restarted

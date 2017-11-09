@@ -24,3 +24,12 @@
       regexp: '.*PubkeyAuthentication.*'
       line: 'PubkeyAuthentication yes'
       validate: 'sshd -tf %s'
+    notify: Restart sshd
+
+  handlers:
+  - name: Restart sshd
+    systemd:
+      name: sshd
+      state: reloaded
+      daemon-reload: yes
+
