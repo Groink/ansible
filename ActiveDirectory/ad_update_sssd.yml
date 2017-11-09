@@ -8,7 +8,7 @@
   - name: Update sssd.conf file
     template:
       src: sssd.conf
-      path: /etc/sssd/sssd.conf
+      dest: /etc/sssd/sssd.conf
       owner: root
       group: root
       mode: 0600
