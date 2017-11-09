@@ -16,6 +16,7 @@
       path: /etc/ssh/sshd_config
       regexp: '.*AuthorizedKeysCommandUser.*'
       line: 'AuthorizedKeysCommandUser nobody'
+    notify: Reload sshd config
 
   - name: Enable public key authentication
     lineinfile:
@@ -23,12 +24,11 @@
       regexp: '.*PubkeyAuthentication.*'
       line: 'PubkeyAuthentication yes'
       validate: 'sshd -tf %s'
-    notify: Restart sshd
+    notify: Reload sshd config
 
   handlers:
-  - name: Restart sshd
+  - name: Reload sshd config
     systemd:
       name: sshd
       state: reloaded
       daemon-reload: yes
-
