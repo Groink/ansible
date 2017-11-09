@@ -1,7 +1,7 @@
 # CentOS 7 Active Directory join using realmd
 
 ---
-- name: Installat prerequisites (EPEL)
+- name: Install prerequisites (EPEL)
   yum:
     name: epel-release
     state: latest
@@ -33,11 +33,6 @@
   command: /bin/pip install pexpect
 
 # Configuring chrony to use domain controllers at time servers
-
-- name: Ensure that chronyd is installed
-  yum:
-    name: chrony
-    state: present
 
 # Comments out any lines starting with "server" and containing "centos", ending with "iburst".
 # Why sed? Using sed was easier for me than trying to figure out how to get the backrefs to work in the

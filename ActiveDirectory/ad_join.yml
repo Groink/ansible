@@ -5,13 +5,17 @@
   remote_user: ansible
   vars:
   tasks:
-  - name: Join as CentOS 7
+  - name: Join CentOS 7 to the domain
     include_tasks: ad_join_centos7_TASKS.yml
     when: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7")
 
-  - name: Join as Ubuntu 16
+  - name: Join Ubuntu 16 box to the domain
     include_tasks: ad_join_ubuntu16_TASKS.yml
     when: (ansible_distribution == "Ubuntu" and ansible_distribution_major_version == "16")
+
+#  - name: Join Debian 9 box to the domain
+#    include_tasks: ad_join_debian8_TASKS.yml
+#    when: (ansible_distribution == "Debian" and ansible_distribution_major_version == "9")
 
 # Handlers
 

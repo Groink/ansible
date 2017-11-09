@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  remote_user: ansible
+  vars:
+  tasks:
+  - name: Add AuthorizedKeysCommand directive to /etc/ssh/sshd_config
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '.*AuthorizedKeysCommand.*'
+      line: 'AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys'
+      validate: 'sshd -tf %s'
+
+  - name: Add AuthorizedKeysCommandUser directive to /etc/ssh/sshd_config
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '.*AuthorizedKeysCommandUser.*'
+      line: 'AuthorizedKeysCommandUser nobody'
+      validate: 'sshd -tf %s'
+
+  - name: Enabled public key authentication
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '.*PubkeyAuthentication.*'
+      line: 'PubkeyAuthentication yes'
+      validate: 'sshd -tf %s'

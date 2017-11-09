@@ -26,11 +26,6 @@
 
 # Configuring chrony to use domain controllers at time servers
 
-- name: Ensure that chronyd is installed
-  apt:
-    name: chrony
-    state: present
-
 # Comments out any lines starting with "server" and containing "centos", ending with "iburst".
 # Why sed? Using sed was easier for me than trying to figure out how to get the backrefs to work in the
 # replace module.
