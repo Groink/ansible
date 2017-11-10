@@ -45,7 +45,7 @@
   lineinfile:
     path: /etc/chrony.conf
     line: 'server dc02.corp.tanium.com iburst'
-  notify: Reload chrony
+  notify: Reload chronyd
 
 - name: Add dc01.corp.tanium.com to chrony.conf
   lineinfile:
