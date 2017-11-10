@@ -25,14 +25,14 @@
         name: sssd
         state: restarted
 
-    - name: Reload chrony
+    - name: Restart chrony
       systemd:
         name: chrony
-        state: reloaded
+        state: restarted
         daemon_reload: yes
 
-    - name: Reload chronyd
+    - name: Restart chronyd
       systemd:
         name: chronyd
-        state: reloaded
+        state: restarted
         daemon_reload: yes

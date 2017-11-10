@@ -15,6 +15,7 @@
   with_items:
   - realmd
   - sssd
+  - sssd-tools
   - chrony
   - krb5-workstation
   - samba-common
@@ -45,13 +46,13 @@
   lineinfile:
     path: /etc/chrony.conf
     line: 'server dc02.corp.tanium.com iburst'
-  notify: Reload chronyd
+  notify: Restart chronyd
 
 - name: Add dc01.corp.tanium.com to chrony.conf
   lineinfile:
     path: /etc/chrony.conf
     line: 'server dc01.corp.tanium.com iburst'
-  notify: Reload chronyd
+  notify: Restart chronyd
 
 - name: Configure realmd
   template:
