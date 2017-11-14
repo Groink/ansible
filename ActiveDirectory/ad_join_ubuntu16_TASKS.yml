@@ -57,7 +57,7 @@
     owner: root
     group: root
     mode: 0600
-    
+
 - name: Install Kerberos 5 client
   apt:
     name: krb5-user
