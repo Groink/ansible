@@ -12,7 +12,7 @@
   - sssd-tools
   - adcli
   - chrony
-  - krb5-user
+#  - krb5-user
   - samba-common
   - python-pip
 
