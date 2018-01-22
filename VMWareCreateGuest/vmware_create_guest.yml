@@ -1,0 +1,77 @@
+---
+- hosts: {{ your_ansible_host }}
+  become: yes
+  become_method: sudo
+  remote_user: ansible
+  vars:
+    newline: "\n"
+  tasks:
+
+  - name: Create Ubuntu 16 guest from template
+    vmware_guest:
+      hostname: "{{ vcenter_host }}.{{ domain }}"
+      username: "{{ vcenter_user }}@{{ domain }}"
+      password: "{{ vcenter_pass }}"
+      validate_certs: no
+      state: poweredon
+      annotation: "Owner: {{ prov_owner }}{{ newline }}Purpose: {{ prov_purpose }}"
+      folder: "CORP/vm/Trials and Demos/David Hunter"
+      name: "{{ prov_hostname }}"
+      esxi_hostname: "{{ dest_vm_host }}.{{ domain }}"
+      template: "{{ ubuntu_template_name }}"
+#      cluster: ProdCluster
+      resource_pool: Resources
+      datacenter: CORP
+      disk:
+      - size_gb: "{{ vm_disk_size }}"
+        type: thin
+        datastore: "{{ dest_vm_datastore }}"
+      hardware:
+        memory_mb: "{{ vm_mem_size }}"
+        num_cpus: "{{ vm_vcpu_num }}"
+      networks:
+        - name: VLAN_100
+          ip: "{{ prov_ip_addr }}"
+          type: static
+          netmask: 255.255.254.0
+          gateway: 10.20.100.1
+          dns_servers:
+          - 10.20.100.30
+          - 10.20.100.31
+          domain: "{{ domain }}"
+    when: ( prov_distro == "Ubuntu" )
+
+  - name: Create CentOS 7 guest from template
+    vmware_guest:
+      hostname: {{ vcenter_host }}.{{ domain }}
+      username: "{{ vcenter_user }}@{{ domain }}
+      password: "{{ vcenter_pass }}"
+      validate_certs: no
+      state: poweredon
+      annotation: "Owner: {{ prov_owner }}{{ newline }}Purpose: {{ prov_purpose }}"
+      guest_id: centos64Guest
+      folder: "CORP/vm/Trials and Demos/David Hunter"
+      name: "{{ prov_hostname }}"
+      esxi_hostname: "{{ dest_vm_host }}.{{ domain }}"
+      template: {{ centos_template_name }}
+#      cluster: ProdCluster
+      resource_pool: Resources
+      datacenter: CORP
+      disk:
+      - size_gb: "{{ vm_disk_size }}"
+        type: thin
+        datastore: "{{ dest_vm_datastore }}"
+      hardware:
+        memory_mb: "{{ vm_mem_size }}"
+        num_cpus: "{{ vm_vcpu_num }}"
+      networks:
+        - name: VLAN_100
+          ip: "{{ prov_ip_addr }}"
+          type: static
+          netmask: 255.255.254.0
+          gateway: 10.20.100.1
+          dns_servers:
+          - 10.20.100.30
+          - 10.20.100.31
+          domain: "{{ domain }}"
+    when: ( prov_distro == "CentOS" )
