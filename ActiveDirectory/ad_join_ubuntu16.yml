@@ -45,21 +45,21 @@
   - name: Comment out default Ubuntu pool
     command: /bin/sed -i '/^server.*ubuntu.*iburst$/s/^/#\ /g' /etc/chrony/chrony.conf
 
-  - name: Add dc02.corp.tanium.com to chrony.conf
+  - name: Add DC1 to chrony.conf
     lineinfile:
       path: /etc/chrony/chrony.conf
-      line: 'server dc02.corp.tanium.com iburst'
+      line: 'server {{ dc1 }}.{{ domain }}'
     notify: Reload chrony
 
-  - name: Add dc01.corp.tanium.com to chrony.conf
+  - name: Add DC2 to chrony.conf
     lineinfile:
       path: /etc/chrony/chrony.conf
-      line: 'server dc01.corp.tanium.com iburst'
+      line: 'server {{ dc2 }}.{{ domain }} iburst'
     notify: Reload chrony
 
   - name: Join the domain
     expect:
-      command: /usr/sbin/realm join -U {{ adm_user }} corp.tanium.com --install=/
+      command: /usr/sbin/realm join -U {{ adm_user }} {{ domain }} --install=/
       responses:
         '^Password for.*:': "{{ adm_password }}"
       timeout: 15
