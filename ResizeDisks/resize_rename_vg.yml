@@ -1,0 +1,32 @@
+---
+- hosts: {{ your_ansible_host }}
+  become: yes
+  become_method: sudo
+  become_user: root
+  remote_user: ansible
+  vars:
+  tasks:
+  - name: Wait
+    wait_for:
+      host: "{{ prov_ip_addr }}"
+      port: 22
+      state: started
+
+  - name: Run bash script to destroy and recreate partition for sizing
+    script: resize_ubuntu.sh
+    delegate_to: "{{ prov_ip_addr }}"
+
+  - name: Change references in configuration files
+    replace:
+      path: "{{ item }}"
+      regexp: 'ubuntu16--template'
+      replace: "{{ prov_hostname }}"
+    with_items:
+      - '/etc/fstab'
+      - '/boot/grub/grub.cfg'
+      - '/etc/initramfs-tools/conf.d/resume'
+    delegate_to: "{{ prov_ip_addr }}"
+
+  - name: Update initramfs
+    shell: 'update-initramfs -c -k all'
+    delegate_to: "{{ prov_ip_addr }}"
