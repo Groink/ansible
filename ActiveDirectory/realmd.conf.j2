@@ -34,5 +34,5 @@ samba = yes
 default-shell = /bin/bash
 default-home = /home/%D/%U
 
-[corp.tanium.com]
-computer-ou = OU=Linux,OU=Servers,DC=corp,DC=tanium,DC=com
+[{{ domain }}]
+computer-ou = OU=Linux,OU=Servers,DC=corp,DC={{ domain }},DC=com
