@@ -1,0 +1,9 @@
+---
+- name: Add Information Technology group to sudoers
+  template:
+    src: Admins
+    dest: /etc/sudoers.d/Admins
+    mode: 0640
+    owner: root
+    group: root
+    validate: '/usr/sbin/visudo -cf %s'
