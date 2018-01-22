@@ -41,16 +41,16 @@
 - name: Comment out default CentOS pool
   command: /bin/sed -i '/^server.*centos.*iburst$/s/^/#\ /g' /etc/chrony.conf
 
-- name: Add dc02.corp.tanium.com to chrony.conf
+- name: Add DC1 to chrony.conf
   lineinfile:
     path: /etc/chrony.conf
-    line: 'server dc02.corp.tanium.com iburst'
+    line: 'server {{ dc1 }}.{{ domain }} iburst'
   notify: Restart chronyd
 
-- name: Add dc01.corp.tanium.com to chrony.conf
+- name: Add DC2 chrony.conf
   lineinfile:
     path: /etc/chrony.conf
-    line: 'server dc01.corp.tanium.com iburst'
+    line: 'server {{ dc2 }}.{{ domain }} iburst'
   notify: Restart chronyd
 
 - name: Configure realmd
@@ -73,7 +73,7 @@
     
 - name: Join the domain
   expect:
-    command: /sbin/realm join -U {{ adm_user }}@corp.tanium.com corp.tanium.com
+    command: /sbin/realm join -U {{ adm_user }}@{{ domain }} {{ domain }}
     responses:
       '^Password for.*:': "{{ adm_password }}"
     timeout: 15
