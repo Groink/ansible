@@ -1,0 +1,45 @@
+---
+- name: Set sshd timeouts
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: "{{ item }}"
+    validate: 'sshd -tf %s'
+  with_items:
+    - '# Set ssh connection timeout to 15 min'
+    - 'ClientAliveInterval 300'
+    - 'ClientAliveCountMax 3'
+
+- name: Set ansible user to pubkey authentication only
+  blockinfile:
+    path: /etc/ssh/sshd_config
+    block: |
+      Match User ansible
+            PasswordAuthentication no
+    validate: 'sshd -tf %s'
+  notify: Restart sshd
+  backup: yes
+  delegate_to: "{{ prov_ip_addr }}"
+
+- name: Set SSH Banner
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: "Banner /etc/ssh/sshd_banner"
+    validate: 'sshd -tf %s'
+  notify: Restart sshd
+  backup: yes
+  delegate_to: "{{ prov_ip_addr }}"
+
+- name: Copy SSH Banner file to remote machine
+  template:
+    src: sshd_banner
+    dest: /etc/ssh/sshd_banner
+    mode: 0644
+    owner: root
+    group: root
+  notify: Restart sshd
+
+- name: Wait
+  wait_for:
+    host: "{{ prov_ip_addr }}"
+    port: 22
+    state: started
