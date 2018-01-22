@@ -1,0 +1,41 @@
+---
+- hosts: "{{ your_ansible_host }}"
+  become: yes
+  become_method: sudo
+  remote_user: ansible
+  vars:
+  tasks:
+  - name: sshd hardening
+    include_tasks: sshd_harden_TASKS.yml
+    delegate_to: "{{ prov_ip_addr }}"
+
+  - name: Change ansible local password
+    user:
+      name: ansible
+#     password: [uncomment and put your hashed password here]
+      update_password: always
+    delegate_to: "{{ prov_ip_addr }}"
+
+  - name: Configure UFW
+    include_tasks: config_ufw_TASKS.yml
+    when: ( prov_distro == "Ubuntu" )
+    delegate_to: "{{ prov_ip_addr }}"
+
+  - name: Configure firewalld
+    include_tasks: config_firewalld_TASKS.yml
+    when: ( prov_distro == "CentOS" )
+    delegate_to: "{{ prov_ip_addr }}"
+
+  - name: Configure sudoers
+    template:
+      src: Admins
+      dest: /etc/sudoers.d/Admins
+      validate: '/usr/sbin/visudo -cf %s'
+    delegate_to: "{{ prov_ip_addr }}"
+
+  handlers:
+  - name: Restart sshd
+    systemd:
+      name: sssd
+      state: restarted
+    delegate_to: "{{ prov_ip_addr }}"
